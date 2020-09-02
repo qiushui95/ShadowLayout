@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import son.ysy.custom.shadow.drawable.ShadowDrawable
 
-class ShadowConstraintLayout @JvmOverloads constructor(
+open class ShadowConstraintLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

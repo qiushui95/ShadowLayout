@@ -15,15 +15,15 @@ class ShadowDrawable internal constructor(originDrawable: Drawable?) :
         const val DEFAULT_SHOW_END = true
         const val DEFAULT_SHOW_BOTTOM = true
 
-        const val DEFAULT_RADIUS = 0
+        const val DEFAULT_RADIUS = 20
         const val DEFAULT_RADIUS_TOP_START = DEFAULT_RADIUS
         const val DEFAULT_RADIUS_TOP_END = DEFAULT_RADIUS
         const val DEFAULT_RADIUS_BOTTOM_START = DEFAULT_RADIUS
         const val DEFAULT_RADIUS_BOTTOM_END = DEFAULT_RADIUS
 
-        const val DEFAULT_SHADOW_SIZE = 0
+        const val DEFAULT_SHADOW_SIZE = 20
 
-        val DEFAULT_SHADOW_COLOR = Color.parseColor("#20000000")
+        val DEFAULT_SHADOW_COLOR = Color.parseColor("#30000000")
     }
 
     private var showStart: Boolean = Config.DEFAULT_SHOW_START

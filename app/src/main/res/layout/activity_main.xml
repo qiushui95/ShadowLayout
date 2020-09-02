@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="0dp"
+        android:background="#f00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/shadow"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="0dp"
+        android:background="#f00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/shadow"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0px"
+        android:layout_height="1px"
+        android:background="#f00"
+        app:layout_constraintBottom_toTopOf="@id/shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:layout_width="0px"
+        android:layout_height="1px"
+        android:background="#f00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shadow" />
+
+    <son.ysy.custom.shadow.ShadowConstraintLayout
+        android:id="@+id/shadow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:bl_corners_bottomLeftRadius="40dp"
+        app:bl_corners_bottomRightRadius="30dp"
+        app:bl_corners_topLeftRadius="10dp"
+        app:bl_corners_topRightRadius="20dp"
+        app:bl_solid_color="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        app:shadowClBottomEndRadius="30dp"
+        app:shadowClBottomStartRadius="40dp"
+        app:shadowClColor="#50000000"
+        app:shadowClSize="20dp"
+        app:shadowClTopEndRadius="20dp"
+        app:shadowClTopStartRadius="10dp">
+
+        <!--        <View-->
+        <!--            android:id="@+id/view"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:background="#f00"-->
+        <!--            android:layout_margin="6dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+    </son.ysy.custom.shadow.ShadowConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

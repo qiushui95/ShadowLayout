@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ShadowConstraintLayout">
+        <attr name="shadowClShowStart" format="boolean|reference" />
+        <attr name="shadowClShowTop" format="boolean|reference" />
+        <attr name="shadowClShowEnd" format="boolean|reference" />
+        <attr name="shadowClShowBottom" format="boolean|reference" />
+        <attr name="shadowClRadius" format="dimension|reference" />
+        <attr name="shadowClTopStartRadius" format="dimension|reference" />
+        <attr name="shadowClTopEndRadius" format="dimension|reference" />
+        <attr name="shadowClBottomEndRadius" format="dimension|reference" />
+        <attr name="shadowClBottomStartRadius" format="dimension|reference" />
+        <attr name="shadowClColor" format="color|reference" />
+        <attr name="shadowClSize" format="dimension|reference" />
+    </declare-styleable>
+</resources>

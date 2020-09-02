@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".MainActivity">
 
     <View
@@ -57,19 +57,19 @@
         app:shadowClBottomEndRadius="30dp"
         app:shadowClBottomStartRadius="40dp"
         app:shadowClColor="#50000000"
+        app:shadowClShowTop="false"
         app:shadowClSize="20dp"
         app:shadowClTopEndRadius="20dp"
         app:shadowClTopStartRadius="10dp">
 
-        <!--        <View-->
-        <!--            android:id="@+id/view"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:background="#f00"-->
-        <!--            android:layout_margin="6dp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#f00"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </son.ysy.custom.shadow.ShadowConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

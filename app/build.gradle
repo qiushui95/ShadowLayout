@@ -24,13 +24,13 @@ android {
     }
 }
 
-def useJitpack = true
+def useJitpack = false
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     if (useJitpack) {
-        implementation("com.github.qiushui95:ShadowLayout:1.0.0")
+        implementation("com.github.qiushui95:ShadowLayout:1.0.1")
     } else {
         implementation project(":shadow")
     }

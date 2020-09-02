@@ -10,7 +10,8 @@ abstract class DrawableWrapper internal constructor(
     originDrawable: Drawable?
 ) : Drawable(), Drawable.Callback {
 
-    protected lateinit var wrapperDrawable: Drawable
+    internal lateinit var wrapperDrawable: Drawable
+        private set
 
     init {
         setWrappedDrawable(originDrawable)

@@ -12,12 +12,13 @@ open class ShadowConstraintLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private lateinit var builder: ShadowDrawable.Builder
 
     init {
-        val shadowDrawable = getShadowDrawable()
+        val builder = getShadowDrawableBuilder()
 
         context.obtainStyledAttributes(attrs, R.styleable.ShadowConstraintLayout).apply {
-            shadowDrawable.resetShowStart(
+            builder.resetShowStart(
                 getBoolean(
                     R.styleable.ShadowConstraintLayout_shadowClShowStart,
                     ShadowDrawable.Config.DEFAULT_SHOW_START
@@ -52,7 +53,7 @@ open class ShadowConstraintLayout @JvmOverloads constructor(
                 R.styleable.ShadowConstraintLayout_shadowClRadius,
                 ShadowDrawable.Config.DEFAULT_RADIUS
             ).apply {
-                shadowDrawable.resetTopStartRadius(
+                builder.resetTopStartRadius(
                     getDimensionPixelSize(
                         R.styleable.ShadowConstraintLayout_shadowClTopStartRadius,
                         -1
@@ -79,6 +80,8 @@ open class ShadowConstraintLayout @JvmOverloads constructor(
                 )
             }
         }.recycle()
+
+        builder.build()
     }
 
     override fun setBackground(background: Drawable?) {
@@ -88,23 +91,18 @@ open class ShadowConstraintLayout @JvmOverloads constructor(
                 super.setBackground(background)
             }
             originBackground is ShadowDrawable -> {
-                originBackground.setWrappedDrawable(background)
-            }
-            else -> {
-                super.setBackground(ShadowDrawable(background))
+                getShadowDrawableBuilder().resetOriginDrawable(originBackground.wrapperDrawable)
+                    .build()
             }
         }
     }
 
     @Synchronized
-    fun getShadowDrawable(): ShadowDrawable {
-        val originBackground = background
-        return if (originBackground is ShadowDrawable) {
-            originBackground
-        } else {
-            ShadowDrawable(originBackground).apply {
-                background = this
-            }
+    fun getShadowDrawableBuilder(): ShadowDrawable.Builder {
+        if (!this::builder.isInitialized) {
+            builder = ShadowDrawable.Builder(this)
         }
+
+        return builder
     }
 }

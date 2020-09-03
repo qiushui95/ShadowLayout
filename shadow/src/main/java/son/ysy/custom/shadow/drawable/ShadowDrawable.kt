@@ -62,6 +62,7 @@ class ShadowDrawable private constructor(
             private set
         var showBottom: Boolean = Config.DEFAULT_SHOW_BOTTOM
             private set
+
         var topStartRadius: Int = Config.DEFAULT_RADIUS_TOP_START
             private set
         var topEndRadius: Int = Config.DEFAULT_RADIUS_TOP_END
@@ -70,6 +71,7 @@ class ShadowDrawable private constructor(
             private set
         var bottomStartRadius: Int = Config.DEFAULT_RADIUS_BOTTOM_START
             private set
+
         var shadowSize: Int = Config.DEFAULT_SHADOW_SIZE
             private set
         var shadowColor: Int = Config.DEFAULT_SHADOW_COLOR
@@ -227,11 +229,14 @@ class ShadowDrawable private constructor(
             bounds.width() - rect.right,
             bounds.height() - rect.bottom
         )
+
         val maxRadius = min(bounds.width() / 2, bounds.height() / 2)
+
         val topStartRadius = min(builder.topStartRadius, maxRadius)
         val topEndRadius = min(builder.topEndRadius, maxRadius)
         val bottomEndRadius = min(builder.bottomEndRadius, maxRadius)
         val bottomStartRadius = min(builder.bottomStartRadius, maxRadius)
+
         buildEdgeComponents(
             bounds,
             topStartRadius,
@@ -261,90 +266,75 @@ class ShadowDrawable private constructor(
             Shader.TileMode.CLAMP
         )
 
+        buildEdgeComponent(
+            builder.showStart,
+            builder.showBottom,
+            builder.showTop,
+            bounds.height(),
+            startEdgeRectF,
+            bottomStartRadius,
+            topStartRadius
+        )
+        buildEdgeComponent(
+            builder.showTop,
+            builder.showStart,
+            builder.showEnd,
+            bounds.width(),
+            topEdgeRectF,
+            topStartRadius,
+            topEndRadius
+        )
+        buildEdgeComponent(
+            builder.showEnd,
+            builder.showTop,
+            builder.showBottom,
+            bounds.height(),
+            endEdgeRectF,
+            topEndRadius,
+            bottomEndRadius
+        )
+        buildEdgeComponent(
+            builder.showBottom,
+            builder.showEnd,
+            builder.showStart,
+            bounds.width(),
+            bottomEdgeRectF,
+            bottomEndRadius,
+            bottomStartRadius
+        )
+    }
 
-        if (builder.showStart) {
-            var start = builder.shadowSize * 1f
-            val top = 0f
-            var end = bounds.height() * 1f - builder.shadowSize
-            val bottom = builder.shadowSize * 1f
-
-            if (builder.showBottom) {
-                start += bottomStartRadius
-            } else {
-                start -= builder.shadowSize
-            }
-            if (builder.showTop) {
-                end -= topStartRadius
-            } else {
-                end += builder.shadowSize
-            }
-            startEdgeRectF.set(start, top, end, bottom)
-        } else {
-            startEdgeRectF.setEmpty()
+    private fun buildEdgeComponent(
+        show: Boolean,
+        showStart: Boolean,
+        showEnd: Boolean,
+        width: Int,
+        rectF: RectF,
+        startRadius: Int,
+        endRadius: Int
+    ) {
+        if (!show) {
+            rectF.setEmpty()
+            return
         }
 
-        if (builder.showTop) {
-            var start = builder.shadowSize * 1f
-            val top = 0f
-            var end = bounds.width() * 1f - builder.shadowSize
-            val bottom = builder.shadowSize * 1f
-
-            if (builder.showStart) {
-                start += topStartRadius
-            } else {
-                start -= builder.shadowSize
-            }
-            if (builder.showEnd) {
-                end -= topEndRadius
-            } else {
-                end += builder.shadowSize
-            }
-            topEdgeRectF.set(start, top, end, bottom)
+        val start = if (showStart) {
+            startRadius * 1f + builder.shadowSize
         } else {
-            topEdgeRectF.setEmpty()
+            startRadius * 1f
         }
 
-        if (builder.showEnd) {
-            var start = builder.shadowSize * 1f
-            val top = 0f
-            var end = bounds.height() * 1f - builder.shadowSize
-            val bottom = builder.shadowSize * 1f
-
-            if (builder.showTop) {
-                start += topEndRadius
-            } else {
-                start -= builder.shadowSize
-            }
-            if (builder.showBottom) {
-                end -= bottomEndRadius
-            } else {
-                end += builder.shadowSize
-            }
-            endEdgeRectF.set(start, top, end, bottom)
+        val end = if (showEnd) {
+            width - endRadius * 1f - builder.shadowSize
         } else {
-            endEdgeRectF.setEmpty()
+            width - endRadius * 1f
         }
-
-        if (builder.showBottom) {
-            var start = builder.shadowSize * 1f
-            val top = 0f
-            var end = bounds.width() * 1f - builder.shadowSize
-            val bottom = builder.shadowSize * 1f
-
-            if (builder.showEnd) {
-                start += bottomEndRadius
-            } else {
-                start -= builder.shadowSize
-            }
-            if (builder.showStart) {
-                end -= bottomStartRadius
-            } else {
-                end += builder.shadowSize
-            }
-            bottomEdgeRectF.set(start, top, end, bottom)
-        } else {
-            bottomEdgeRectF.setEmpty()
-        }
+        rectF.set(
+            start,
+            0f,
+            end,
+            builder.shadowSize * 1f
+        )
     }
 
     private fun buildCornerComponents(
@@ -353,63 +343,99 @@ class ShadowDrawable private constructor(
         bottomEndRadius: Int,
         bottomStartRadius: Int
     ) {
-        topStartCornerPath.reset()
-        if (builder.showStart && builder.showTop) {
-            val center = builder.shadowSize * 1f + topStartRadius
-            topStartCornerPaint.shader = buildRadialGradient(center, topStartRadius * 1f)
-            resetPath(topStartCornerPath, center, topStartRadius * 1f)
-        } else {
-            topStartCornerPaint.shader = null
-        }
+        buildCornerComponent(
+            topStartCornerPaint,
+            topStartCornerPath,
+            topStartRadius,
+            builder.showStart,
+            builder.showTop
+        )
 
-        topEndCornerPath.reset()
-        if (builder.showTop && builder.showEnd) {
-            val center = builder.shadowSize * 1f + topEndRadius
-            topEndCornerPaint.shader = buildRadialGradient(center, topEndRadius * 1f)
-            resetPath(topEndCornerPath, center, topEndRadius * 1f)
-        } else {
-            topEndCornerPaint.shader = null
-        }
+        buildCornerComponent(
+            topEndCornerPaint,
+            topEndCornerPath,
+            topEndRadius,
+            builder.showTop,
+            builder.showEnd
+        )
 
-        bottomEndCornerPath.reset()
-        if (builder.showEnd && builder.showBottom) {
-            val center = builder.shadowSize * 1f + bottomEndRadius
-            bottomEndCornerPaint.shader = buildRadialGradient(center, bottomEndRadius * 1f)
-            resetPath(bottomEndCornerPath, center, bottomEndRadius * 1f)
+        buildCornerComponent(
+            bottomEndCornerPaint,
+            bottomEndCornerPath,
+            bottomEndRadius,
+            builder.showEnd,
+            builder.showBottom
+        )
 
-        } else {
-            bottomEndCornerPaint.shader = null
-        }
-
-        bottomStartCornerPath.reset()
-        if (builder.showBottom && builder.showStart) {
-            val center = builder.shadowSize * 1f + bottomStartRadius
-            bottomStartCornerPaint.shader = buildRadialGradient(center, bottomStartRadius * 1f)
-            resetPath(bottomStartCornerPath, center, bottomStartRadius * 1f)
-        } else {
-            bottomStartCornerPaint.shader = null
-        }
-    }
-
-    private fun buildRadialGradient(center: Float, radius: Float): RadialGradient {
-        val edgeColor = Color.TRANSPARENT
-
-        return RadialGradient(
-            center,
-            center,
-            center,
-            intArrayOf(edgeColor, builder.shadowColor, edgeColor),
-            floatArrayOf(0f, radius / center, 1f),
-            Shader.TileMode.CLAMP
+        buildCornerComponent(
+            bottomStartCornerPaint,
+            bottomStartCornerPath,
+            bottomStartRadius,
+            builder.showBottom,
+            builder.showStart
         )
     }
 
-    private fun resetPath(path: Path, center: Float, radius: Float) {
-        path.moveTo(0f, center)
-        rectF.set(0f, 0f, center * 2f, center * 2f)
+    private fun buildCornerComponent(
+        paint: Paint,
+        path: Path,
+        radius: Int,
+        showStart: Boolean,
+        showTop: Boolean
+    ) {
+        path.reset()
+
+        if (!showStart && !showTop) {
+            paint.shader = null
+            return
+        }
+
+        val outerRadius = radius * 1f + builder.shadowSize
+
+        val innerRadius = radius * 1f
+
+        val ratio = innerRadius / outerRadius
+
+        val endColor = Color.TRANSPARENT
+
+        val centerX = if (showStart) {
+            outerRadius
+        } else {
+            outerRadius - builder.shadowSize
+        }
+
+        val centerY = if (showTop) {
+            outerRadius
+        } else {
+            outerRadius - builder.shadowSize
+        }
+
+        paint.shader = RadialGradient(
+            centerX,
+            centerY,
+            outerRadius,
+            intArrayOf(endColor, builder.shadowColor, endColor),
+            floatArrayOf(0f, ratio, 1f),
+            Shader.TileMode.CLAMP
+        )
+
+        path.moveTo(0f, centerY)
+
+        rectF.set(
+            centerX - outerRadius,
+            centerY - outerRadius,
+            centerX + outerRadius,
+            centerY + outerRadius
+        )
         path.arcTo(rectF, 180f, 90f)
         path.rLineTo(0f, builder.shadowSize * 1f)
-        rectF.set(center - radius, center - radius, center + radius, center + radius)
+
+        rectF.set(
+            centerX - innerRadius,
+            centerY - innerRadius,
+            centerX + innerRadius,
+            centerY + innerRadius
+        )
         path.arcTo(rectF, -90f, -90f)
         path.close()
     }
@@ -455,35 +481,27 @@ class ShadowDrawable private constructor(
 
     private fun drawCorner(canvas: Canvas) {
         //top start corner
-        if (builder.showStart && builder.showTop) {
-            canvas.drawPath(topStartCornerPath, topStartCornerPaint)
-        }
+        canvas.drawPath(topStartCornerPath, topStartCornerPaint)
 
         //top end corner
-        if (builder.showTop && builder.showEnd) {
-            canvas.save()
-            canvas.translate(contentRegion.width(), 0f)
-            canvas.rotate(90f)
-            canvas.drawPath(topEndCornerPath, topEndCornerPaint)
-            canvas.restore()
-        }
+        canvas.save()
+        canvas.translate(contentRegion.width(), 0f)
+        canvas.rotate(90f)
+        canvas.drawPath(topEndCornerPath, topEndCornerPaint)
+        canvas.restore()
 
         //bottom end corner
-        if (builder.showEnd && builder.showBottom) {
-            canvas.save()
-            canvas.translate(contentRegion.width(), contentRegion.height())
-            canvas.rotate(180f)
-            canvas.drawPath(bottomEndCornerPath, bottomEndCornerPaint)
-            canvas.restore()
-        }
+        canvas.save()
+        canvas.translate(contentRegion.width(), contentRegion.height())
+        canvas.rotate(180f)
+        canvas.drawPath(bottomEndCornerPath, bottomEndCornerPaint)
+        canvas.restore()
 
         //bottom start corner
-        if (builder.showBottom && builder.showStart) {
-            canvas.save()
-            canvas.translate(0f, contentRegion.height())
-            canvas.rotate(270f)
-            canvas.drawPath(bottomStartCornerPath, bottomStartCornerPaint)
-            canvas.restore()
-        }
+        canvas.save()
+        canvas.translate(0f, contentRegion.height())
+        canvas.rotate(270f)
+        canvas.drawPath(bottomStartCornerPath, bottomStartCornerPaint)
+        canvas.restore()
     }
 }

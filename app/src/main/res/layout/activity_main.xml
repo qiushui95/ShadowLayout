@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".MainActivity">
 
     <View
@@ -54,19 +53,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5"
-        app:shadowClBottomEndRadius="30dp"
-        app:shadowClBottomStartRadius="40dp"
         app:shadowClColor="#50000000"
+        app:shadowClRadius="20dp"
+        app:shadowClShowBottom="false"
+        app:shadowClShowStart="false"
         app:shadowClShowTop="false"
-        app:shadowClSize="20dp"
-        app:shadowClTopEndRadius="20dp"
-        app:shadowClTopStartRadius="10dp">
+        app:shadowClSize="20dp">
 
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#f00"
+            app:bl_corners_radius="20dp"
+            app:bl_solid_color="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
